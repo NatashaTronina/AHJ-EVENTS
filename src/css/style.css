@@ -1,0 +1,66 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+#game-field {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px); 
+    grid-template-rows: repeat(4, 100px);  
+    width: 404px;  
+    height: 404px; 
+    border: 2px solid #000000;
+    position: relative; 
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.board-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+.character-img {
+    width: 80px; 
+    height: 80px;
+    object-fit: cover;
+    cursor: pointer;
+    position: absolute; 
+    transition: transform 0.5s ease-in-out; 
+}
+
+#stop-button {
+    display: block;
+    margin: 20px auto 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#stop-button:hover:not(:disabled) {
+    background-color: #cc0000;
+}
+#stop-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
