@@ -1,7 +1,8 @@
-export default function createScore(onGameOver) {
+export default function createScore(onGameOver, onWin) { 
   let score = 0;
   let misses = 0;
   const maxMisses = 5;
+  const maxScore = 10; 
   let scoreElement = null;
 
   function init() {
@@ -14,6 +15,11 @@ export default function createScore(onGameOver) {
   function incrementScore() {
     score += 1;
     updateDisplay();
+    if (score >= maxScore) { 
+        if (onWin) {
+            onWin();
+        }
+    }
   }
 
   function incrementMisses() {
@@ -37,7 +43,6 @@ export default function createScore(onGameOver) {
   }
 
   init(); 
-
   return {
     incrementScore,
     incrementMisses,

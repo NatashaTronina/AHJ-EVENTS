@@ -1,5 +1,6 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -7,13 +8,16 @@ body {
     margin: 0;
     font-family: sans-serif;
 }
-
+#game-container {
+    text-align: center;
+}
 
 #game-field {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .game-board {
@@ -37,9 +41,9 @@ body {
     background-color: #f9f9f9;
 }
 
-.character-img {
-    width: 80px; 
-    height: 80px;
+.goblin {
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     cursor: pointer;
     position: absolute; 
@@ -64,4 +68,15 @@ body {
 #stop-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+#score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
 }

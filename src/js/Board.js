@@ -2,10 +2,14 @@ import createGoblin from "./Goblin.js";
 
 export default function createBoard(gameInstance, size = 4) {
   let cells = [];
-  let goblin = null;
+  let goblin = null; 
   let boardElement = null;
+  let goblinTimeoutId = null; 
 
-  function createBoardElements() { 
+  const APPEARANCE_DELAY = 1000; 
+
+
+  function createBoardElements() {
     boardElement = document.createElement("div");
     boardElement.classList.add("game-board");
     for (let row = 0; row < size; row++) {
@@ -24,29 +28,48 @@ export default function createBoard(gameInstance, size = 4) {
       gameField.appendChild(boardElement);
     }
   }
-
+  
   function getRandomCell() {
     return cells[Math.floor(Math.random() * cells.length)];
   }
-
+  
   function handleCellClick(cell) {
-    if (goblin && goblin.element && cell.contains(goblin.element)) {
-      goblin.hit();
+    const goblinElementInCell = cell.querySelector(".goblin"); 
+    
+    if (goblinElementInCell) {
+        if (goblin && typeof goblin.hit === 'function') {
+            goblin.hit();
+        }
     }
   }
-
+  
   function scheduleNextAppearance() {
-    if (!gameInstance.isRunning) return; 
-    if (goblin) {
-        goblin.disappear(false); 
+    if (!gameInstance.isRunning) return;
+    
+    if (!goblin) {
+        goblin = createGoblin({ getRandomCell, game: gameInstance });
     }
-    goblin = createGoblin({ getRandomCell, game: gameInstance }); 
-    goblin.appear();
+    
+    if (goblinTimeoutId) {
+        clearTimeout(goblinTimeoutId);
+    }
+    
+    goblinTimeoutId = setTimeout(() => {
+      if (goblin && typeof goblin.appear === 'function') {
+          goblin.appear();
+      }
+    }, APPEARANCE_DELAY); 
   }
-
+  
   function reset() {
-    if (goblin) goblin.disappear(false); 
-    goblin = null; 
+    if (goblin) {
+        goblin.removeGoblin(); 
+        goblin = null; 
+    }
+    if (goblinTimeoutId) {
+        clearTimeout(goblinTimeoutId);
+        goblinTimeoutId = null;
+    }
   }
 
   createBoardElements(); 

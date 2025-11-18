@@ -1,20 +1,22 @@
 import goblinImage from "../../asset/goblin.png";
 
-export default function createGoblin(board) { 
+export default function createGoblin(board) {
   let element = null;
-  let timeoutId = null;
+  let timeoutId = null; 
 
   function appear() {
     const randomCell = board.getRandomCell();
-    if (!randomCell) return;
+    if (!randomCell) {
+      return;
+    }
 
     if (element) { 
-        element.remove();
-        element = null;
+      element.remove();
+      element = null;
     }
-    if (timeoutId) { 
-        clearTimeout(timeoutId);
-        timeoutId = null;
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
     }
 
     element = document.createElement("img");
@@ -23,12 +25,11 @@ export default function createGoblin(board) {
     randomCell.appendChild(element);
 
     timeoutId = setTimeout(() => {
-        disappear(true);
-        board.scheduleNextAppearance(); 
+      handleMiss(); 
     }, 1000); 
   }
-
-  function disappear(isMiss = false) {
+  
+  function removeGoblin() { 
     if (element) {
       element.remove();
       element = null;
@@ -37,21 +38,30 @@ export default function createGoblin(board) {
       clearTimeout(timeoutId);
       timeoutId = null;
     }
-    if (isMiss) {
-      board.game.score.incrementMisses(); 
+  }
+
+  function handleMiss() { 
+    removeGoblin(); 
+    board.game.score.incrementMisses(); 
+    
+    if (board && board.game && board.game.board && typeof board.game.board.scheduleNextAppearance === 'function') {
+      board.game.board.scheduleNextAppearance();
     }
   }
 
   function hit() {
-    disappear(false); 
+    removeGoblin(); 
     board.game.score.incrementScore(); 
-    board.scheduleNextAppearance(); 
-  }
-
+    
+    if (board && board.game && board.game.board && typeof board.game.board.scheduleNextAppearance === 'function') {
+      board.game.board.scheduleNextAppearance();
+    }
+  } 
+  
   return {
-    element, 
+    element: element, 
     appear,
-    disappear,
+    removeGoblin, 
     hit
   };
 }
