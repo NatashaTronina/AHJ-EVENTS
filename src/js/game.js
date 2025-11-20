@@ -22,6 +22,25 @@ export default function createGame() {
   function init() {
     score = createScore(() => game.gameOver(), () => game.win()); 
     board = createBoard(game);
+
+    const modal = document.createElement("div");
+    modal.id = "modal";
+    modal.classList.add("modal");
+    modal.innerHTML = `
+      <div class="modal-content">
+        <span id="modal-close" class="close">&times;</span>
+        <p id="modal-message"></p>
+      </div>
+    `;
+    document.body.append(modal);
+
+    // Обработчик для закрытия модального окна
+    const modalClose = document.getElementById("modal-close");
+    if (modalClose) {
+      modalClose.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
   }
 
   function start() {
@@ -32,6 +51,7 @@ export default function createGame() {
     score.reset();
     board.scheduleNextAppearance(); 
     document.getElementById("stop-button").disabled = false;
+    document.getElementById("start-button").disabled = true; 
   }
 
   function stop() {
@@ -41,16 +61,28 @@ export default function createGame() {
     isRunning = false;
     board.reset();
     document.getElementById("stop-button").disabled = true;
+    document.getElementById("start-button").disabled = false; 
   }
 
   function gameOver() {
     game.stop();
-    alert("Игра окончена! Вы пропустили 5 гоблинов.");
+    showModal("Игра окончена! Вы пропустили 5 гоблинов.");
   }
   
   function win() { 
     game.stop();
-    alert("ПОБЕДА! Вы набрали 10 очков!");
+    showModal("ПОБЕДА! Вы набрали 10 очков!");
+  }
+
+  function showModal(message) {
+    const modal = document.getElementById("modal");
+    const modalMessage = document.getElementById("modal-message");
+    if (modal && modalMessage) {
+      modalMessage.textContent = message;
+      modal.style.display = "block";
+    } else {
+      console.error("Модальное окно не найдено. Проверьте HTML.");
+    }
   }
 
   init();

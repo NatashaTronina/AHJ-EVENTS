@@ -9,7 +9,7 @@ export default function createScore(onGameOver, onWin) {
     scoreElement = document.createElement("div");
     scoreElement.id = "score";
     scoreElement.innerHTML = `Счёт: ${score} | Пропуски: ${misses}`;
-    document.body.appendChild(scoreElement);
+    document.body.append(scoreElement);
   }
 
   function incrementScore() {

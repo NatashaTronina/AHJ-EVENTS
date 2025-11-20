@@ -1,16 +1,16 @@
 import createGame from "./js/game.js";
 import "./css/style.css";
 
-
 const game = createGame();
 
-const stopButtonInitial = document.getElementById("stop-button");
-if (stopButtonInitial) {
-    stopButtonInitial.disabled = true;1
-    console.warn("index.js - Кнопка StopGame не найдена!");
+const startButton = document.getElementById("start-button");
+if (startButton) {
+  startButton.addEventListener("click", () => {
+    game.start();
+  });
+} else {
+  console.warn("index.js - Кнопка Start не найдена!");
 }
-
-game.start();
 
 const stopButton = document.getElementById("stop-button");
 if (stopButton) {
@@ -18,5 +18,5 @@ if (stopButton) {
     game.stop();
   });
 } else {
-    console.warn("index.js - Кнопка StopGame не найдена для добавления слушателя!");
+  console.warn("index.js - Кнопка Stop не найдена!");
 }

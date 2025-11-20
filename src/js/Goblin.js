@@ -21,12 +21,13 @@ export default function createGoblin(board) {
 
     element = document.createElement("img");
     element.src = goblinImage;
+    element.alt = "Goblin";
     element.classList.add("goblin");
-    randomCell.appendChild(element);
+    randomCell.append(element);
 
     timeoutId = setTimeout(() => {
       handleMiss(); 
-    }, 1000); 
+    }, 1000);
   }
   
   function removeGoblin() { 

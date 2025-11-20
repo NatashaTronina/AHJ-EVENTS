@@ -5,32 +5,39 @@ export default function createBoard(gameInstance, size = 4) {
   let goblin = null; 
   let boardElement = null;
   let goblinTimeoutId = null; 
+  let lastCell = null;
 
-  const APPEARANCE_DELAY = 1000; 
-
+  const APPEARANCE_DELAY = 1; 
 
   function createBoardElements() {
     boardElement = document.createElement("div");
     boardElement.classList.add("game-board");
-    for (let row = 0; row < size; row++) {
-      for (let col = 0; col < size; col++) {
-        const cell = document.createElement("div");
-        cell.classList.add("board-cell");
-        cell.dataset.row = row;
-        cell.dataset.col = col;
-        cell.addEventListener("click", () => handleCellClick(cell));
-        boardElement.appendChild(cell);
-        cells.push(cell);
-      }
+    
+    let htmlString = '';
+    for (let i = 0; i < size * size; i++) {
+      htmlString += '<div class="board-cell"></div>';
     }
+    boardElement.innerHTML = htmlString; 
+    
+    const cellElements = boardElement.querySelectorAll('.board-cell');
+    cellElements.forEach(cell => {
+      cell.addEventListener("click", () => handleCellClick(cell));
+      cells.push(cell);
+    });
+    
     const gameField = document.querySelector("#game-field");
     if (gameField) {
-      gameField.appendChild(boardElement);
+      gameField.append(boardElement);
     }
   }
   
   function getRandomCell() {
-    return cells[Math.floor(Math.random() * cells.length)];
+    let randomCell;
+    do {
+      randomCell = cells[Math.floor(Math.random() * cells.length)];
+    } while (randomCell === lastCell); // Исключаем предыдущую ячейку
+    lastCell = randomCell;
+    return randomCell;
   }
   
   function handleCellClick(cell) {
@@ -70,6 +77,7 @@ export default function createBoard(gameInstance, size = 4) {
         clearTimeout(goblinTimeoutId);
         goblinTimeoutId = null;
     }
+    lastCell = null;
   }
 
   createBoardElements(); 
